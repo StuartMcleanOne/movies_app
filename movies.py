@@ -1,6 +1,30 @@
 import random
 import statistics
 import movie_storage_sql as movie_storage # renamed the sql storage to match that of the json storage module to exercise parity
+import requests
+
+API_KEY = "5156d3f1"
+
+def fetch_movie_data(title):
+    url = f"http://www.omdbapi.com/?apikey={API_KEY}&t={title}"
+    try:
+        response = requests.get(url)
+        data = response.json()
+
+        if data.get("Response") == "True":
+            rating = data.get("imdbRating")
+            return {
+                "title": data.get("Title"),
+                "year": int(data.get("Year")),
+                "rating": float(rating) if rating and rating != "N/A" else None,
+                "poster": data.get("Poster")
+            }
+        else:
+            print(F"Movie '{title}' not found in OMDb.")
+            return None
+    except requests.exceptions.RequestException:
+        print("Network error. Could not connect to OMDb.")
+        return None
 
 
 def list_movies():
@@ -16,38 +40,29 @@ def list_movies():
 
 
 def add_movie():
-    """Adds a movie to the movie database"""
-    movies = movie_storage.list_movies()
+    title_input = input("Enter movie title: ").strip()
+    if not title_input:
+        print("movie title cannot be empty.")
+        return
 
-    while True: # While loop here handles blank inputs
-        title = input("Enter new movie name: ").strip()
-        if not title:
-            print("Movie title cannot be empty.")
-        elif title in movies:
-            print(f"Movie '{title}' already exists!")
-            return
-        else:
-            break
+    movie_data = fetch_movie_data(title_input)
+    if not movie_data:
+        return # Error handled inside fetch function
 
-    while True:
-        try:
-            year = int(input("Enter year of release: "))
-            break
-        except ValueError:
-            print("Invalid input. Year must be an integer.")
+    # Check if movie already exists
+    existing = movie_storage.list_movies()
+    if movie_data["title"] in existing:
+        print(f"Movie '{movie_data['title']}' already exists.")
+        return
 
-    while True:
-        try:
-            rating = float(input("Enter movie rating (0–10): "))
-            if 0 <= rating <= 10:
-                break
-            else:
-                print("Rating must be between 0 and 10.")
-        except ValueError:
-            print("Invalid input. Rating must be a number.")
-
-    movie_storage.add_movie(title, year, rating)
-    print(f"Movie '{title}' successfully added.")
+    # Insert into database
+    movie_storage.add_movie(
+        movie_data["title"],
+        movie_data["year"],
+        movie_data["rating"],
+        movie_data["poster"],
+    )
+    print(f"Movie '{movie_data['title']}' added successfully.")
 
 
 def delete_movie():
@@ -142,13 +157,38 @@ def search_movie():
         else:
             break
 
+    # Local database search
     results = [title for title in movies if query in title.lower()]
     if results:
+        print("Found in your collection:")
         for title in results:
             print(f"{title} ({movies[title]['year']}): {movies[title]['rating']}")
-    else:
-        print("No matching movies found.")
+        return
 
+    # OMBd fallback . Added this for smoother UX logic.
+    search_term = query.title()
+    print("No match in your collection. Searching OMDb...")
+    movie_data = fetch_movie_data(search_term)
+
+    if movie_data:
+        print("\nFound via OMDb:")
+        print(f"{movie_data['title']} ({movie_data['year']})")
+        print(f"IMDb Rating: {movie_data['rating']}")
+        print(f"Poster URL: {movie_data['poster']}")
+
+        confirm = input("\nWould you like to add this movie to your collection? (Y/N): ").strip().lower()
+        if confirm == 'y':
+            movie_storage.add_movie(
+                movie_data["title"],
+                movie_data["year"],
+                movie_data["rating"],
+                movie_data["poster"]
+            )
+            print(f"\nMovie '{movie_data['title']}' added successfully.")
+        else:
+            print("\nNo changes made.")
+    else:
+        print(f"\nMovie '{search_term}' not found via OMDb")
 
 def sort_movies():
     """Displays all movies sorted from high to low"""
@@ -161,9 +201,28 @@ def sort_movies():
     else:
         print("No movies found.")
 
+def seed_database():
+    """Seed the database with original ten movies if its empty"""
+    if not movie_storage.list_movies():
+        print("Seeding database with original movies...\n")
+        starter_titles = [
+            "The Shawshank Redemption", "Pulp Fiction", "The Room",
+            "The Godfather", "The Godfather: Part II", "The Dark Knight",
+            "12 Angry Men", "Everything Everywhere All At Once",
+            "Forrest Gump", "Star Wars: Episode V"
+        ]
+        for title in starter_titles:
+            data = fetch_movie_data(title)
+            if data:
+                movie_storage.add_movie(
+                    data["title"], data["year"], data["rating"], data["poster"]
+                )
+            else:
+                print(f" Could not fetch '{title}' from OMDb.")
 
 def menu():
     """Menu display and user input"""
+
     while True:
         print("\n********** My Movie Database **********")
         print("0. Exit")  # Moved exit to "0"
@@ -206,17 +265,9 @@ def menu():
 
 def main():
     """Runs the program"""
+    seed_database()
     menu()
 
-
 if __name__ == "__main__":
-
-    movie_storage.add_movie("Inception", 2010, 8.8)
-    movies = movie_storage.list_movies()
-    print(movies)
-    movie_storage.update_movie("Inception", 9.0)
-    print(movie_storage.list_movies())
-    movie_storage.delete_movie("Inception")
-    print(movie_storage.list_movies())1
 
     main()
