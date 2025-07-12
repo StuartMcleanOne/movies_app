@@ -1,16 +1,11 @@
 import random
 import statistics
-import movie_storage  # imports custom storage module
-from movie_storage_sql import (
-    add_movie as sql_add_movie,
-    list_movies as sql_list_movies,
-    update_movie as sql_update_movie,
-    delete_movie as sql_delete_movie
-)
+import movie_storage_sql as movie_storage # renamed the sql storage to match that of the json storage module to exercise parity
+
 
 def list_movies():
     """Lists all the movies and their information."""
-    movies = movie_storage.get_movies()
+    movies = movie_storage.list_movies()
 
     if movies:
         print(f"\n{len(movies)} movies in total\n")
@@ -22,7 +17,7 @@ def list_movies():
 
 def add_movie():
     """Adds a movie to the movie database"""
-    movies = movie_storage.get_movies()
+    movies = movie_storage.list_movies()
 
     while True: # While loop here handles blank inputs
         title = input("Enter new movie name: ").strip()
@@ -57,7 +52,7 @@ def add_movie():
 
 def delete_movie():
     """Deletes movie from database"""
-    movies = movie_storage.get_movies()
+    movies = movie_storage.list_movies()
 
     while True: # While loop handles blank entries
         title = input("Enter movie name to delete: ").strip()
@@ -75,7 +70,7 @@ def delete_movie():
 
 def update_movie():
     """Updates movie rating in database"""
-    movies = movie_storage.get_movies()
+    movies = movie_storage.list_movies()
 
     while True: # While loop here validates inputs
         title = input("Enter movie name to update: ").strip()
@@ -103,7 +98,7 @@ def update_movie():
 
 def stats():
     """Displays movies stats using persistent storage"""
-    movies = movie_storage.get_movies()
+    movies = movie_storage.list_movies()
 
     if movies:
         ratings = [details["rating"] for details in movies.values()]
@@ -126,7 +121,7 @@ def stats():
 
 def random_movie():
     """Selects a random movie using persistent storage"""
-    movies = movie_storage.get_movies()
+    movies = movie_storage.list_movies()
 
     if movies:
         title = random.choice(list(movies.keys()))
@@ -138,7 +133,7 @@ def random_movie():
 
 def search_movie():
     """Search for movies using keyword"""
-    movies = movie_storage.get_movies()
+    movies = movie_storage.list_movies()
 
     while True: # While loop handles blank inputs
         query = input("Enter part of a movie name: ").strip().lower()
@@ -157,7 +152,7 @@ def search_movie():
 
 def sort_movies():
     """Displays all movies sorted from high to low"""
-    movies = movie_storage.get_movies()
+    movies = movie_storage.list_movies()
 
     if movies:
         sorted_list = sorted(movies.items(), key=lambda item: item[1]["rating"], reverse=True)
@@ -216,15 +211,12 @@ def main():
 
 if __name__ == "__main__":
 
-    sql_add_movie("Inception", 2010, 8.8)
-
-    movies = sql_list_movies()
+    movie_storage.add_movie("Inception", 2010, 8.8)
+    movies = movie_storage.list_movies()
     print(movies)
-
-    sql_update_movie("Inception", 9.0)
-    print(sql_list_movies())
-
-    sql_delete_movie("Inception")
-    print(sql_list_movies())
+    movie_storage.update_movie("Inception", 9.0)
+    print(movie_storage.list_movies())
+    movie_storage.delete_movie("Inception")
+    print(movie_storage.list_movies())1
 
     main()
