@@ -1,11 +1,13 @@
 # movies_app
-# 🎬 My Movie Collection App
+
+" “All assignment scaffolding files have been left untouched. My implementation is contained fully within the movies_app/ directory. I spent the entire time building it in pycharm I just expected that I would clone it into codio like the other assignments. I was uncertain if deleting the orginal files would affect any automated assessment or grading tools. So ive just left it. ”"
+# My Movie Collection App
 
 A Python CLI application for managing a personal movie database — complete with poster links, ratings, and a dynamic website generator.
 
 ---
 
-## 📦 Features
+## Features
 
 - Add, delete, update, and list movies
 - Store movie details in a SQLite database
@@ -16,7 +18,7 @@ A Python CLI application for managing a personal movie database — complete wit
 
 ---
 
-## 🚀 Installation
+## Installation
 
 Clone the repo to your local machine:
 
@@ -30,13 +32,13 @@ Install dependencies:
 pip intall -r requirements.txt
 ```
 ---
-## ▶️ Usage
+## Usage
 Follow on-screen menu to interact with movie collection. To generate website choose option 9.
 ```bash
 python -m app.movies
 ```
 ---
-## 💾 Data & Structure
+## Data & Structure
 
  - Database is stored in /database/movies.db
 
@@ -46,7 +48,7 @@ python -m app.movies
 
 ---
 
-## 👨‍💻Tech Stack
+## Tech Stack
 
  - Python 3
 
