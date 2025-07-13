@@ -1,30 +1,10 @@
 import random
 import statistics
-import movie_storage_sql as movie_storage # renamed the sql storage to match that of the json storage module to exercise parity
 import requests
 
-API_KEY = "5156d3f1"
-
-def fetch_movie_data(title):
-    url = f"http://www.omdbapi.com/?apikey={API_KEY}&t={title}"
-    try:
-        response = requests.get(url)
-        data = response.json()
-
-        if data.get("Response") == "True":
-            rating = data.get("imdbRating")
-            return {
-                "title": data.get("Title"),
-                "year": int(data.get("Year")),
-                "rating": float(rating) if rating and rating != "N/A" else None,
-                "poster": data.get("Poster")
-            }
-        else:
-            print(F"Movie '{title}' not found in OMDb.")
-            return None
-    except requests.exceptions.RequestException:
-        print("Network error. Could not connect to OMDb.")
-        return None
+from database import movie_storage_sql as movie_storage# renamed the sql storage to match that of the json storage module to exercise parity
+from app.utils import fetch_movie_data
+from app.website_generator import generate_website
 
 
 def list_movies():
@@ -234,6 +214,7 @@ def menu():
         print("6. Random movie")
         print("7. Search movie")
         print("8. Movies sorted by rating")
+        print("9. Generate website")
 
         choice = input("Enter choice (0–8): ").strip()  # User input for menu choice
 
@@ -258,6 +239,8 @@ def menu():
             search_movie()
         elif choice == "8":
             sort_movies()
+        elif choice =="9":
+            generate_website()
         else:
             # Error handling for incorrect inputs.
             print("Invalid choice. Please enter number between 0 and 8.") #Validates inputs

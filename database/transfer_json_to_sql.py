@@ -2,7 +2,7 @@ import json
 from movie_storage_sql import add_movie
 
 # Load the JSON file
-with open("data.json","r") as file:
+with open("data.json", "r") as file:
     movies = json.load(file)
 
 # Insert each movie into the SQL database
