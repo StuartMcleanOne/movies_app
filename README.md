@@ -4,18 +4,28 @@ Welcome to **My Movie Database**, a Python command-line application that helps y
 
 ---
 
+### ▶️ How to Run the Application
+
+From the project root (Movies_3), run the following command:
+
+````bash
+python -m app.movies
+````
+This launches the command-line menu where you can manage your movie collection.
+
+
 ## ✨ Features
 
 This application lets you:
 
-- 📃 View a list of all movies in your collection
-- ➕ Add a new movie by title (fetches data from the OMDb API)
-- ❌ Delete a movie from your collection
-- ⭐ Update a movie's rating
-- 📊 View statistics (average rating, best/worst movies)
-- 🎲 Get a random movie recommendation
-- 🔍 Search for a movie in your collection or online
-- 🌐 Generate a static HTML website to display your movies
+- 📃 View a list of all movies in your collection  
+- ➕ Add a new movie by title (fetches data from the OMDb API)  
+- ❌ Delete a movie from your collection  
+- ⭐ Update a movie's rating  
+- 📊 View statistics (average rating, best/worst movies)  
+- 🎲 Get a random movie recommendation  
+- 🔍 Search for a movie in your collection or online  
+- 🌐 Generate a static HTML website to display your movies  
 
 ---
 
@@ -27,64 +37,69 @@ Follow these steps to set up and run the project.
 
 - Python **3.6 or later** installed on your system
 
+---
+
 ### 2. Setup
 
 Clone the repository and navigate into the project folder:
 
-````bash
+```bash
 git clone https://github.com/your-username/Movies_3.git
-cd Movies_3 
+cd Movies_3
 ````
 ### 3. Install Dependencies
-It’s recommended to use a virtual environment:
+It’s highly recommended to use a virtual environment to manage dependencies:
 
 ````bash
 python -m venv venv
 Activate the environment:
 
-Windows:
-
-bash
-.\venv\Scripts\activate
 macOS/Linux:
 
 bash
 source venv/bin/activate
+Windows:
 
+bash
+.\venv\Scripts\activate
+Install the required packages:
+
+bash
+pip install -r requirements.txt
 ````
+
 #### 4. OMDb API Key
-The app uses the OMDb API to fetch movie data. Get a free API key from OMDb API, then create a .env file in the movies_app directory:
+The app uses the OMDb API to fetch movie data. Get a free API key from OMDb API, then create a .env file in the root directory (Movies_3/) with the following content:
 
 OMDB_API_KEY=YOUR_API_KEY_HERE
-▶️ How to Run the Application
-From the project root (Movies_3), run:
-````
-bash
-python -m movies_app.app.movies
-This launches the command-line menu where you can manage your movie collection.
-````
-#### 🌐 Generating the Website
+
+
+### 🌐 Generating the Website
 Choose option 9 in the menu to generate a static HTML website.
 
-The site will be created at: Movies_3/movies_app/_static/index.html
+The site will be created at: Movies_3/_static/index.html
 
 Open this file in your browser to view your movie collection.
 
+
+### 🗂 File Structure
 ````
 Movies_3/
-├── movies_app/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── movies.py
-│   │   ├── utils.py
-│   │   └── website_generator.py
-│   ├── database/
-│   │   ├── movie_storage_sql.py
-│   │   └── movies.db
-│   ├── _static/
-│   │   ├── index.html
-│   │   ├── index_template.html
-│   │   └── style.css
-│   └── .env
-└── requirements.txt
+├── app/
+│   ├── __init__.py
+│   ├── movies.py
+│   ├── utils.py
+│   └── website_generator.py
+├── database/
+│   ├── movie_storage_sql.py
+│   └── movies.db
+├── _static/
+│   ├── index.html
+│   ├── index_template.html
+│   └── style.css
+├── .env
+├── .gitignore
+├── requirements.txt
+└── README.md
 ````
+
