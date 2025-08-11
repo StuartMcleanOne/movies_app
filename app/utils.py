@@ -1,6 +1,9 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-API_KEY = "5156d3f1"
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
 
 def fetch_movie_data(title):
     url = f"http://www.omdbapi.com/?apikey={API_KEY}&t={title}"

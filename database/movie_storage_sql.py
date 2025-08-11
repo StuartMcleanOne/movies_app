@@ -6,7 +6,7 @@ db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "movies.db"))
 DB_URL = f"sqlite:///{db_path}"
 
 # Create the engine
-engine = create_engine(DB_URL, echo=True)
+engine = create_engine(DB_URL, echo=False)
 
 # Create the movies table if it does not exist
 with engine.connect() as connection:
