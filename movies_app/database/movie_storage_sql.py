@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, text
 db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "movies.db"))
 DB_URL = f"sqlite:///{db_path}"
 
-# Create the engine
+# Create the engine, setting echo=False for cleaner output
 engine = create_engine(DB_URL, echo=False)
 
 # Create the movies table if it does not exist

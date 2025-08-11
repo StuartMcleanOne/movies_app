@@ -2,7 +2,9 @@ import requests
 import os
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
+
 API_KEY = os.getenv("API_KEY")
 
 def fetch_movie_data(title):
@@ -25,4 +27,3 @@ def fetch_movie_data(title):
     except requests.exceptions.RequestException:
         print("Network error. Could not connect to OMDb.")
         return None
-
