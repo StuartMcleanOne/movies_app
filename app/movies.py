@@ -1,19 +1,10 @@
-import os
-import sys
 import random
 import statistics
 import requests
 
-# Define the base directory of the project
-# This ensures BASE_DIR points to the 'Movies_3' directory
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Add the project root to the system path
-sys.path.append(BASE_DIR)
-
-from movies_app.database import movie_storage_sql as movie_storage
-from movies_app.app.utils import fetch_movie_data
-from movies_app.app.website_generator import generate_website
+from database import movie_storage_sql as movie_storage
+from .utils import fetch_movie_data
+from .website_generator import generate_website
 
 
 def list_movies():
@@ -214,7 +205,7 @@ def menu():
 
     while True:
         print("\n********** My Movie Database **********")
-        print("0. Exit")
+        print("0. Exit")  # Moved exit to "0"
         print("1. List movies")
         print("2. Add movie")
         print("3. Delete movie")
@@ -225,12 +216,13 @@ def menu():
         print("8. Movies sorted by rating")
         print("9. Generate website")
 
-        choice = input("Enter choice (0–9): ").strip()
+        choice = input("Enter choice (0–9): ").strip()  # User input for menu choice
 
-        print()
+        print()  # Adds a blank space before displaying output
+        # Corresponding functions based on user choice
         if choice == "0":
             print("bye!")
-            break
+            break  # stops loop
         elif choice == "1":
             list_movies()
         elif choice == "2":
@@ -248,9 +240,10 @@ def menu():
         elif choice == "8":
             sort_movies()
         elif choice =="9":
-            generate_website(BASE_DIR)
+            generate_website()
         else:
-            print("Invalid choice. Please enter number between 0 and 9.")
+            # Error handling for incorrect inputs.
+            print("Invalid choice. Please enter number between 0 and 8.") #Validates inputs
 
 
 def main():
@@ -259,4 +252,5 @@ def main():
     menu()
 
 if __name__ == "__main__":
+
     main()
