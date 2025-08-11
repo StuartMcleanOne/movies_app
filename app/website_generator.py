@@ -1,7 +1,13 @@
-def generate_website():
-    from database import movie_storage_sql as movie_storage
+import os
+from database import movie_storage_sql as movie_storage
 
-    with open("_static/index_template.html", "r", encoding="utf-8") as file:
+
+def generate_website():
+    # Construct the absolute path to the template file
+    template_dir = os.path.dirname(os.path.abspath(__file__))
+    template_path = os.path.join(template_dir, "../../_static/index_template.html")
+
+    with open(template_path, "r", encoding="utf-8") as file:
         template = file.read()
 
     movies = movie_storage.list_movies()
@@ -22,7 +28,10 @@ def generate_website():
     final_html = template.replace("__TEMPLATE_TITLE__", "My Movie Collection")
     final_html = final_html.replace("__TEMPLATE_MOVIE_GRID__", movie_grid)
 
-    with open("_static/index.html", "w", encoding="utf-8") as output_file:
+    # Construct the absolute path for the output file
+    output_path = os.path.join(template_dir, "../../_static/index.html")
+
+    with open(output_path, "w", encoding="utf-8") as output_file:
         output_file.write(final_html)
 
     print("Website was generated successfully.")
